@@ -5,7 +5,7 @@ import java.util.List;
 import kr.co.miraesn08.firstproject.dto.ProductDTO;
 
 public interface ProductDAO {
-	public ProductDTO add(ProductDTO dto);
+	public boolean add(ProductDTO dto);
 	public ProductDTO get(int productId);
 	public boolean set(ProductDTO dto);
 	public boolean delete(int productId);
