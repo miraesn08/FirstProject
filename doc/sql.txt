@@ -1,0 +1,15 @@
+
+// prodcuts table create
+create table products(
+    productId number primary key,
+    productCode varchar2(50) not null,
+    productName varchar2(256) not null,
+    productUnitName varchar2(20)
+);
+create sequence products_seq;
+// prodcuts table drop
+drop sequence products_seq;
+drop table products;
+//
+select * from tabs;
+select * from seq;
