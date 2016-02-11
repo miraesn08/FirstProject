@@ -7,7 +7,7 @@ import kr.co.miraesn08.firstproject.dto.PhoneBookDTO;
 public class PhoneBookListResult {
 	private int errorCode;
 	private String errorMessage;
-	private List<PhoneBookDTO> dtoList;
+	private List<PhoneBookDTO> phoneBookList;
 	
 	public int getErrorCode() {
 		return errorCode;
@@ -22,15 +22,15 @@ public class PhoneBookListResult {
 		this.errorMessage = errorMessage;
 	}
 	public List<PhoneBookDTO> getPhoneBookList() {
-		return dtoList;
+		return phoneBookList;
 	}
-	public void setPhoneBookList(List<PhoneBookDTO> dtoList) {
-		this.dtoList = dtoList;
+	public void setPhoneBookList(List<PhoneBookDTO> phoneBookList) {
+		this.phoneBookList = phoneBookList;
 	}
 	
 	@Override
 	public String toString() {
 		return "PhoneBookListResult [errorCode=" + errorCode + ", errorMessage=" + errorMessage + ", phoneBookList="
-				+ dtoList + "]";
+				+ phoneBookList + "]";
 	}
 }
