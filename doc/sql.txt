@@ -13,3 +13,14 @@ drop table products;
 //
 select * from tabs;
 select * from seq;
+
+// phonebooks table create
+if object_id ('dbo.phonebooks', 'U') is not null
+    drop table phonebooks;
+go
+create table phonebooks(
+    id int identity(1,1),
+    name nvarchar(20),
+    phone nvarchar(50),
+    reg_date datetime
+);
