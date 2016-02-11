@@ -1,5 +1,7 @@
 package test;
 
+import java.util.List;
+
 import kr.co.miraesn08.firstproject.common.DBConnection;
 import kr.co.miraesn08.firstproject.dao.PhoneBookDAO;
 import kr.co.miraesn08.firstproject.dao.PhoneBookDAOImpl;
@@ -10,10 +12,7 @@ public class PhoneBookDAOTest {
 	public static void main(String[] args) {
 		String line = "===================================";
 		
-		PhoneBookDTO dto = new PhoneBookDTO();
 		PhoneBookDAO dao = new PhoneBookDAOImpl();
-		PhoneBookDTO getDto = null;
-		int id = 0;
 		
 		// db connection
 		//System.out.println("url  : " + DBConnection.url);
@@ -28,6 +27,11 @@ public class PhoneBookDAOTest {
 		// drop
 		//System.out.println("drop : " + dao.drop());
 		//System.out.println(line);
+		
+/*		
+		PhoneBookDTO dto = new PhoneBookDTO();
+		PhoneBookDTO getDto = null;
+		int id = 0;
 		
 		// add
 		dto.setName("향단이");
@@ -86,7 +90,16 @@ public class PhoneBookDAOTest {
 			}
 		}
 		System.out.println(line);
-
+*/
+		// getList
+		System.out.println("getList : ");
+		List<PhoneBookDTO> list;
+		list = dao.getList();
+		for (PhoneBookDTO item : list) {
+			System.out.println(item);
+		}
+		System.out.println(line);
+		
 	}
 
 }

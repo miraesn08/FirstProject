@@ -144,8 +144,36 @@ public class PhoneBookDAOImpl implements PhoneBookDAO {
 
 	@Override
 	public List<PhoneBookDTO> getList() {
-		// TODO Auto-generated method stub
-		return null;
+		List<PhoneBookDTO> dtoList = new ArrayList<PhoneBookDTO>();
+		
+		DBUtil db = DBUtil.getInstance();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = db.getConnection();
+			String sql = "select id,name,phone,reg_date from phonebooks order by id";
+			ps = conn.prepareStatement(sql);
+			
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				PhoneBookDTO dto = new PhoneBookDTO();
+				
+				dto.setId(rs.getInt(1));
+				dto.setName(rs.getString(2));
+				dto.setPhone(rs.getString(3));
+				dto.setRegDate(rs.getString(4));
+				
+				dtoList.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(conn, ps, rs);
+		}
+		
+		return dtoList;
 	}
 
 	@Override
