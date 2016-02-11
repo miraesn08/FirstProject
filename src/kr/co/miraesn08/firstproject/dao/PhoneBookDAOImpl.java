@@ -3,7 +3,9 @@ package kr.co.miraesn08.firstproject.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.miraesn08.firstproject.common.DBUtil;
@@ -13,8 +15,52 @@ public class PhoneBookDAOImpl implements PhoneBookDAO {
 
 	@Override
 	public boolean add(PhoneBookDTO phoneBook) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean returnValue = false;
+
+		DBUtil db = DBUtil.getInstance();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		PreparedStatement ps2 = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = db.getConnection();
+			
+			String sql = "insert into phonebooks(name,phone,reg_date) values (?,?,getdate())";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, phoneBook.getName());
+			ps.setString(2, phoneBook.getPhone());
+			
+			returnValue = (ps.executeUpdate() == 1);
+			
+			if (returnValue) {
+				sql = "select top 1 id,reg_date from phonebooks where name=? and phone=? order by id desc";
+				ps2 = conn.prepareStatement(sql);
+				ps2.setString(1, phoneBook.getName());
+				ps2.setString(2, phoneBook.getPhone());
+				rs = ps2.executeQuery();
+				rs.next();
+				phoneBook.setId(rs.getInt(1));
+				phoneBook.setRegDate(rs.getString(2));
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)	rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				if (ps2 != null) ps2.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			db.close(conn, ps);
+		}
+		
+		return returnValue;
 	}
 
 	@Override
@@ -31,8 +77,33 @@ public class PhoneBookDAOImpl implements PhoneBookDAO {
 
 	@Override
 	public PhoneBookDTO get(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		PhoneBookDTO dto = null;
+
+		DBUtil db = DBUtil.getInstance();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			conn = db.getConnection();
+			String sql = "select id,name,phone,reg_date from phonebooks where id=?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				dto = new PhoneBookDTO();
+				dto.setId(rs.getInt(1));
+				dto.setName(rs.getString(2));
+				dto.setPhone(rs.getString(3));
+				dto.setRegDate(rs.getString(4));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(conn, ps, rs);
+		}
+
+		return dto;
 	}
 
 	@Override
