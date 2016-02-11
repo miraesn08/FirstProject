@@ -64,15 +64,51 @@ public class PhoneBookDAOImpl implements PhoneBookDAO {
 	}
 
 	@Override
-	public boolean update(PhoneBookDTO phoneBook) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean update(PhoneBookDTO dto) {
+		boolean returnValue = false;
+
+		DBUtil db = DBUtil.getInstance();
+		Connection conn = null;
+		PreparedStatement ps = null;
+		
+		try {
+			conn = db.getConnection();
+			String sql = "update phonebooks set name=?,phone=? where id=?";
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, dto.getName());
+			ps.setString(2, dto.getPhone());
+			ps.setInt(3, dto.getId());
+			returnValue = (ps.executeUpdate() > 0);
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(conn, ps);
+		}
+		
+		return returnValue;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean returnValue = false;
+		
+		DBUtil db = DBUtil.getInstance();
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try {
+			conn = db.getConnection(); 
+			String sql = "delete from phonebooks where id=?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			returnValue = (ps.executeUpdate() > 0);
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(conn, ps);
+		}
+		
+		return returnValue;
 	}
 
 	@Override
