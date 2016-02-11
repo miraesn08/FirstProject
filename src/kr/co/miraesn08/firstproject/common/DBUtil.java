@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /*
 	Singleton Pattern (http://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-with-examples)
@@ -26,11 +27,11 @@ public class DBUtil {
         return SingletonHelper.INSTANCE;
     }
     
-	public static Connection getConnection() throws Exception {
+	public Connection getConnection() throws Exception {
 		return getConnection(true);
 	}
 
-	public static Connection getConnection(boolean isAutoCommit) throws Exception {
+	public Connection getConnection(boolean isAutoCommit) throws Exception {
 		String url = DBConnection.url;	
 		String user = DBConnection.user;
 		String password = DBConnection.password;
@@ -38,14 +39,31 @@ public class DBUtil {
 		return conn;
 	}
 
-	public static Connection getConnection(String url, String user, String password, boolean isAutoCommit) throws Exception  {
+	public Connection getConnection(String url, String user, String password, boolean isAutoCommit) throws Exception  {
 		Class.forName(DBConnection.driver);
 		Connection conn = DriverManager.getConnection(url, user, password);
 		conn.setAutoCommit(isAutoCommit);
 		return conn;
 	}
-	
-	public static void close(Connection conn, PreparedStatement ps) {
+
+	public void close(Connection conn, Statement stmt) {
+		if (stmt != null) {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}				
+		}		
+	}
+
+	public void close(Connection conn, PreparedStatement ps) {
 		if (ps != null) {
 			try {
 				ps.close();
@@ -62,7 +80,7 @@ public class DBUtil {
 		}		
 	}
 	
-	public static void close(Connection conn, PreparedStatement ps, ResultSet rs) {
+	public void close(Connection conn, PreparedStatement ps, ResultSet rs) {
 		if (rs != null) {
 			try {
 				rs.close();
