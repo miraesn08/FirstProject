@@ -15,13 +15,14 @@ public class ProductDAOImpl implements ProductDAO {
 	public boolean add(ProductDTO dto) {
 		boolean returnValue = false;
 
+		DBUtil db = DBUtil.getInstance();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		PreparedStatement ps2 = null;
 		ResultSet rs = null;
 		
 		try {
-			conn = DBUtil.getConnection(true);
+			conn = db.getConnection(true);
 			
 			String sql = "insert into products values (products_seq.nextval,?,?,?)";
 			ps = conn.prepareStatement(sql);
@@ -50,7 +51,7 @@ public class ProductDAOImpl implements ProductDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			DBUtil.close(conn, ps);
+			db.close(conn, ps);
 		}
 		
 		return returnValue;

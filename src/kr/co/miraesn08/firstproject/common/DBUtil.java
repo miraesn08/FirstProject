@@ -79,7 +79,18 @@ public class DBUtil {
 			}				
 		}		
 	}
-	
+
+	public void close(Connection conn, Statement stmt, ResultSet rs) {
+		if (rs != null) {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		close(conn, stmt);
+	}
+
 	public void close(Connection conn, PreparedStatement ps, ResultSet rs) {
 		if (rs != null) {
 			try {

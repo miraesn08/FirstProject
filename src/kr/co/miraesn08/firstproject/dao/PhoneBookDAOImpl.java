@@ -153,7 +153,9 @@ public class PhoneBookDAOImpl implements PhoneBookDAO {
 		
 		try {
 			conn = db.getConnection();
-			String sql = "select id,name,phone,reg_date from phonebooks order by id";
+			String sql = "select id,name,phone,reg_date"
+					+ " from phonebooks"
+					+ " order by id";
 			ps = conn.prepareStatement(sql);
 			
 			rs = ps.executeQuery();
@@ -177,15 +179,79 @@ public class PhoneBookDAOImpl implements PhoneBookDAO {
 	}
 
 	@Override
-	public List<PhoneBookDTO> getListByField(String fieldName, String searchValue) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PhoneBookDTO> getListByName(String searchName) {
+		List<PhoneBookDTO> dtoList = new ArrayList<PhoneBookDTO>();
+		
+		DBUtil db = DBUtil.getInstance();
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			conn = db.getConnection();
+			String sql = "select id,name,phone,reg_date"
+					+ " from phonebooks" 
+					+ " where name like '%" + searchName + "%'" 
+					+ " order by id";
+			stmt = conn.createStatement();
+			
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				PhoneBookDTO dto = new PhoneBookDTO();
+				
+				dto.setId(rs.getInt(1));
+				dto.setName(rs.getString(2));
+				dto.setPhone(rs.getString(3));
+				dto.setRegDate(rs.getString(4));
+				
+				dtoList.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.close(conn, stmt, rs);
+		}
+		
+		return dtoList;
 	}
 
 	@Override
-	public List<PhoneBookDTO> getListByName(String searchName) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PhoneBookDTO> getListByField(String fieldName, String searchValue) {
+		List<PhoneBookDTO> dtoList = new ArrayList<PhoneBookDTO>();
+		
+		if (fieldName.length() > 0 && searchValue.length() > 0) {
+			DBUtil db = DBUtil.getInstance();
+			Connection conn = null;
+			Statement stmt = null;
+			ResultSet rs = null;
+			
+			try {
+				conn = db.getConnection();
+				String sql = "select id,name,phone,reg_date"
+						+ " from phonebooks" 
+						+ " where " + fieldName + " like '%" + searchValue + "%'" 
+						+ " order by id";
+				stmt = conn.createStatement();
+				
+				rs = stmt.executeQuery(sql);
+				while (rs.next()) {
+					PhoneBookDTO dto = new PhoneBookDTO();
+					
+					dto.setId(rs.getInt(1));
+					dto.setName(rs.getString(2));
+					dto.setPhone(rs.getString(3));
+					dto.setRegDate(rs.getString(4));
+					
+					dtoList.add(dto);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				db.close(conn, stmt, rs);
+			}
+		}
+		
+		return dtoList;
 	}
 
 	@Override

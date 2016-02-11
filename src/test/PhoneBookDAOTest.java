@@ -91,15 +91,36 @@ public class PhoneBookDAOTest {
 		}
 		System.out.println(line);
 */
+		
+		List<PhoneBookDTO> list;
+		
 		// getList
 		System.out.println("getList : ");
-		List<PhoneBookDTO> list;
 		list = dao.getList();
 		for (PhoneBookDTO item : list) {
 			System.out.println(item);
 		}
 		System.out.println(line);
-		
+
+		// getListByName
+		String searchName = "향";
+		System.out.println("getListByName : " + searchName);
+		list = dao.getListByName(searchName);
+		for (PhoneBookDTO item : list) {
+			System.out.println(item);
+		}
+		System.out.println(line);
+
+		// getListByField
+		String fieldName = "phone";
+		String searchValue = "32";
+		System.out.println("getListByField : " + fieldName + "," + searchValue);
+		list = dao.getListByField(fieldName, searchValue);
+		for (PhoneBookDTO item : list) {
+			System.out.println(item);
+		}
+		System.out.println(line);
+
 	}
 
 }
